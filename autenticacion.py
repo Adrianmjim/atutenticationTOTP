@@ -9,6 +9,7 @@ from bottle import run, post, request
 # Resto de importaciones
 from pymongo import MongoClient
 import hashlib
+import utils
 ##############
 # APARTADO 1 #
 ##############
@@ -29,11 +30,18 @@ def signup():
     password2 = request.forms.get('password2')
     if password != password2:
         return "<b>Las contraseñas no coinciden</b>"
-    m=MongoClient()
-    dB=m.giw
-    pipe = [{'$group': {'_id':'$pais', 'total': {'$sum':1}}},{'$sort': {'total': -1, '_id': 1}}, {'$limit':num}]
-    resultado=dB.usuarios.aggregate(pipeline=pipe)
-
+    elif utils.getUser(nickname) != None:
+        print utils.getUser(nickname)
+        return "<b>El alias del usuario ya existe</b>"
+    salt = utils.saltGenerator(len(password))
+    m = hashlib.sha256()
+    m.update(password)
+    m.update(salt)
+    m.update("123456789")
+    password = m.hexdigest()
+    print password
+    utils.insertUser(nickname,name,email,country,password,salt)
+    
 @post('/change_password')
 def change_password():
     pass
@@ -78,7 +86,7 @@ def login_totp():
     pass
 
     
-#if __name__ == "__main__":
+if __name__ == "__main__":
     # NO MODIFICAR LOS PARÁMETROS DE run()
- #   run(host='localhost',port=8080,debug=True)
+    run(host='localhost',port=8080,debug=True)
 signup()

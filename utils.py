@@ -28,10 +28,10 @@ def insertUser(nickName,name,email,country,password,salt):
     
 def deleteUser(nickName):
     db=getDB()
-    db.users.delete_one({"nickName":nickName})
+    db.users.delete_one({"_id":nickName})
     
 def getUser(nickName):
     db=getDB()
-    user=db.users.find_one({"nickName":nickName})
+    user=db.users.find_one({"_id":nickName})
     return user
 
