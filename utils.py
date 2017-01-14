@@ -10,14 +10,28 @@ def saltGenerator(longi):
     ale=uuid.uuid4().hex
     while(len(ale)<longi):
         ale+=uuid.uuid4().hex
-    return ale
-    
-def insertUser(nickName,name,email,country,password,salt):
+    return str(ale)
+
+def getDB():
     m=MongoClient()
     db=m.giw
-    db.users.insert({name:name,
+    return db
+    
+def insertUser(nickName,name,email,country,password,salt):
+    db=getDB()
+    db.users.insert_one({name:name,
                      nickName:nickName,
                      email:email,
                      country:country,
                      password:password,
                      salt:salt})
+    
+def deleteUser(nickName):
+    db=getDB()
+    db.users.delete_one({nickName:nickName})
+    
+def getUser(nickName):
+    db=getDB()
+    user=db.users.find_one({nickName:nickName})
+    return user
+
