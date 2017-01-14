@@ -5,10 +5,10 @@
 #
 
 
-from bottle import run, post
+from bottle import run, post, request
 # Resto de importaciones
-
-
+from pymongo import MongoClient
+import hashlib
 ##############
 # APARTADO 1 #
 ##############
@@ -21,8 +21,18 @@ from bottle import run, post
 
 @post('/signup')
 def signup():
-    pass
-    
+    nickname = request.forms.get('nickname')
+    name = request.forms.get('name')
+    country = request.forms.get('country')
+    email = request.forms.get('email')
+    password = request.forms.get('password')
+    password2 = request.forms.get('password2')
+    if password != password2:
+        return "<b>Las contraseñas no coinciden</b>"
+    m=MongoClient()
+    dB=m.giw
+    pipe = [{'$group': {'_id':'$pais', 'total': {'$sum':1}}},{'$sort': {'total': -1, '_id': 1}}, {'$limit':num}]
+    resultado=dB.usuarios.aggregate(pipeline=pipe)
 
 @post('/change_password')
 def change_password():
@@ -51,7 +61,7 @@ def gen_gauth_url(app_name, username, secret):
     pass
         
 
-def gen_qrcode_url(gauth_url):
+def gen_qrcode_url(gauth_url):  
     # >>> gen_qrcode_url('otpauth://totp/pepe_lopez?secret=JBSWY3DPEHPK3PXP&issuer=GIW_grupoX')
     # 'http://api.qrserver.com/v1/create-qr-code/?data=otpauth%3A%2F%2Ftotp%2Fpepe_lopez%3Fsecret%3DJBSWY3DPEHPK3PXP%26issuer%3DGIW_grupoX'
     pass
@@ -68,6 +78,7 @@ def login_totp():
     pass
 
     
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # NO MODIFICAR LOS PARÁMETROS DE run()
-    run(host='localhost',port=8080,debug=True)
+ #   run(host='localhost',port=8080,debug=True)
+signup()
