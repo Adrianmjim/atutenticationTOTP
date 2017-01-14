@@ -19,19 +19,19 @@ def getDB():
     
 def insertUser(nickName,name,email,country,password,salt):
     db=getDB()
-    db.users.insert_one({name:name,
-                     nickName:nickName,
-                     email:email,
-                     country:country,
-                     password:password,
-                     salt:salt})
+    db.users.insert_one({"name":name,
+                     "_id":nickName,
+                     "email":email,
+                     "country":country,
+                     "password":password,
+                     "salt":salt})
     
 def deleteUser(nickName):
     db=getDB()
-    db.users.delete_one({nickName:nickName})
+    db.users.delete_one({"nickName":nickName})
     
 def getUser(nickName):
     db=getDB()
-    user=db.users.find_one({nickName:nickName})
+    user=db.users.find_one({"nickName":nickName})
     return user
 
