@@ -35,3 +35,6 @@ def getUser(nickName):
     user=db.users.find_one({"_id":nickName})
     return user
 
+def modifyUser(nickName,passW,salt):
+    db=getDB()
+    db.users.update({"_id":nickName},{"$set":{"passWord":passW}},{"$set":{"salt":salt}})
