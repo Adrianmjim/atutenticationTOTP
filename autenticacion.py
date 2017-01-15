@@ -31,7 +31,6 @@ def signup():
     if password != password2:
         return "<b>Las contraseñas no coinciden</b>"
     elif utils.getUser(nickname) != None:
-        print utils.getUser(nickname)
         return "<b>El alias del usuario ya existe</b>"
     salt = utils.saltGenerator(len(password))
     m = hashlib.sha256()
@@ -39,18 +38,49 @@ def signup():
     m.update(salt)
     m.update("123456789")
     password = m.hexdigest()
-    print password
     utils.insertUser(nickname,name,email,country,password,salt)
     
 @post('/change_password')
 def change_password():
-    pass
-            
-
+    nickname = request.forms.get('nickname') 
+    old_password = request.forms.get('old_password')
+    new_password = request.forms.get('new_password')
+    user = utils.getUser(nickname)
+    if user == None:
+        return "<b>Usuario o contraseña incorrectos</b>"
+    m = hashlib.sha256()
+    m.update(old_password)
+    m.update(user['salt'])
+    m.update("123456789")
+    auxPassword = m.hexdigest()
+    if auxPassword == user['password']:
+        salt = utils.saltGenerator(len(new_password))
+        m = hashlib.sha256()
+        m.update(new_password)
+        m.update(salt)
+        m.update("123456789")
+        auxPassword = m.hexdigest()
+        utils.modifyUser(nickname,auxPassword,salt)
+        return "<b>La contraseña del usuario "+nickname+" ha sido modificada</b>"
+    else:
+        return "<b>Usuario o contraseña incorrectos</b>"
+    
 @post('/login')
 def login():
-    pass
-
+    nickname = request.forms.get('nickname')
+    password = request.forms.get('password')
+    user = utils.getUser(nickname)
+    if user == None:
+        return "<b>Usuario o contraseña incorrectos</b>"
+    m = hashlib.sha256()
+    m.update(password)
+    m.update(user['salt'])
+    m.update("123456789")
+    auxPassword = m.hexdigest()
+    if auxPassword == user['password']:
+        return "<b>Bienvenido "+user['name']+"</b>"
+    else:
+        return "<b>Usuario o contraseña incorrectos</b>"
 
 ##############
 # APARTADO 2 #
@@ -89,4 +119,3 @@ def login_totp():
 if __name__ == "__main__":
     # NO MODIFICAR LOS PARÁMETROS DE run()
     run(host='localhost',port=8080,debug=True)
-signup()

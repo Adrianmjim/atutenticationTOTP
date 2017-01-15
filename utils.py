@@ -37,4 +37,4 @@ def getUser(nickName):
 
 def modifyUser(nickName,passW,salt):
     db=getDB()
-    db.users.update({"_id":nickName},{"$set":{"passWord":passW}},{"$set":{"salt":salt}})
+    db.users.update({"_id":nickName},{"$set":{"password":passW, "salt":salt}})
