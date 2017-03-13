@@ -3,11 +3,20 @@
 #
 # CABECERA AQUI
 #
+'''Adrián Martínez Jiménez
+   Lucas Segarra Fernández
+   Declaramos que esta soluci´on
+es fruto exclusivamente de nuestro trabajo personal. No hemos sido
+ayudados por ninguna otra persona ni hemos obtenido la soluci´on de
+fuentes externas, y tampoco hemos compartido nuestra soluci´on con
+nadie. Declaramos adem´as que no hemos realizado de manera deshonesta
+ninguna otra actividad que pueda mejorar nuestros resultados
+ni perjudicar los resultados de los dem´as'''
+   
 
 
 from bottle import run, post, request
 # Resto de importaciones
-from pymongo import MongoClient
 import hashlib 
 import utils
 import onetimepass
@@ -20,6 +29,9 @@ import urllib
 # Explicación detallada del mecanismo escogido para el almacenamiento de c
 # contraseñas, explicando razonadamente por qué es seguro
 #
+'''Utilizamos el algoritmo hash sha256 con sal y pimienta.
+   La sal se genera en base al tamaño de la contraseña.
+   El tamaño de la sal siempre es multiplo de 32 de tal manera que sea siempre de igual tamaño o mayor al de la contraseña'''
 
 
 @post('/signup')

@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jan 14 20:32:46 2017
-
-@author: Propietario
+Adrián Martínez Jiménez
+Lucas Segarra Fernandez
+Declaramos que esta soluci´on
+es fruto exclusivamente de nuestro trabajo personal. No hemos sido
+ayudados por ninguna otra persona ni hemos obtenido la soluci´on de
+fuentes externas, y tampoco hemos compartido nuestra soluci´on con
+nadie. Declaramos adem´as que no hemos realizado de manera deshonesta
+ninguna otra actividad que pueda mejorar nuestros resultados
+ni perjudicar los resultados de los dem´as
 """
 from pymongo import MongoClient
 import uuid
